@@ -1,16 +1,16 @@
 package use_cases
 
 import (
-	"log"
 	"microservice/internal/entities"
+	"microservice/internal/repositories"
 )
 
 type createCategoryUseCase struct {
-	// db
+	repository repositories.ICategoryRepository
 }
 
-func NewCreateCategoryUseCase() *createCategoryUseCase {
-	return &createCategoryUseCase{}
+func NewCreateCategoryUseCase(repository repositories.ICategoryRepository) *createCategoryUseCase {
+	return &createCategoryUseCase{repository}
 }
 
 func (u *createCategoryUseCase) Execute(name string) error {
@@ -20,7 +20,15 @@ func (u *createCategoryUseCase) Execute(name string) error {
 		return err
 	}
 
-	// TODO: persist entity to db
-	log.Println(category)
+	// TODO: Verificar se a categoria já existe antes de salvar
+
+	// como estamos usando uma abstração de repositório,
+	// não precisamos nos preocupar com a implementação específica
+	// (in-memory, Postgres, etc.)
+	err = u.repository.Save(category)
+	if err != nil {
+		return err
+	}
+
 	return nil
 }
