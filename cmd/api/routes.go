@@ -10,6 +10,7 @@ import (
 func CategoryRoutes(router *gin.Engine) {
 	categoryRoutes := router.Group("/categories")
 
+	// Initialize the in-memory category repository
 	inMemoryCategoryRepository := repositories.NewInMemoryCategoryRepository()
 
 	categoryRoutes.POST("/", func(ctx *gin.Context) {
